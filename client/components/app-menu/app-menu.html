@@ -1,0 +1,27 @@
+<div class="navbar navbar-default navbar-static-top">
+    <div class="container">
+        <div class="navbar-header">
+            <button class="navbar-toggle" type="button" ng-click="isCollapsed = !isCollapsed">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <!--<a href="/" class="navbar-brand">Dashboard</a>-->
+        </div>
+        <div collapse="isCollapsed" class="navbar-collapse collapse" id="navbar-main">
+            <ul class="nav navbar-nav">
+                <li class="nav-item"><a ui-sref="dashboard"><span class="glyphicon glyphicon-home"></span>Dashboard</a>
+                </li>
+            </ul>
+            <ul class="nav navbar-nav navbar-right">
+                <li ng-hide="isAuthenticated" class="nav-item"><a ui-sref="signup">Sign up</a>
+                </li>
+                <li ng-hide="isAuthenticated" class="nav-item"><a ui-sref="login">Login</a></li>
+                <li ng-show="isAuthenticated"><p class="navbar-text ng-binding">Hello </p></li>
+                <li ng-show="isAuthenticated" class="nav-item"><a ui-sref="logout">Logout</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</div>
