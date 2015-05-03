@@ -8,37 +8,37 @@
 <!--[if gt IE 8]><!-->
 <html class="no-js"> <!--<![endif]-->
 <head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <base href="/">
-    <title></title>
-    <meta name="description" content="">
-    <meta name="viewport" content="width=device-width">
-    <!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
-    <!-- build:css(client) app/vendor.css -->
-    <!-- bower:css -->
-    <link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap.css" />
-    <link rel="stylesheet" href="bower_components/font-awesome/css/font-awesome.css" />
-    <!-- endbower -->
-    <!-- endbuild -->
-    <!-- build:css({.tmp,client}) app/app.css -->
-    <link rel="stylesheet" href="app/app.css">
-    <!-- injector:css -->
-    <link rel="stylesheet" href="app/app.css">
-    <link rel="stylesheet" href="app/dashboard/dashboard.css">
-    <link rel="stylesheet" href="components/app-menu/app-menu.css">
-    <!-- endinjector -->
-    <!-- endbuild -->
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <base href="/">
+  <title></title>
+  <meta name="description" content="">
+  <meta name="viewport" content="width=device-width">
+  <!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
+  <!-- build:css(client) app/vendor.css -->
+  <!-- bower:css -->
+  <link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap.css"/>
+  <link rel="stylesheet" href="bower_components/font-awesome/css/font-awesome.css"/>
+  <!-- endbower -->
+  <!-- endbuild -->
+  <!-- build:css({.tmp,client}) app/app.css -->
+  <link rel="stylesheet" href="app/app.css">
+  <!-- injector:css -->
+  <link rel="stylesheet" href="app/app.css">
+  <link rel="stylesheet" href="app/dashboard/dashboard.css">
+  <link rel="stylesheet" href="components/app-menu/app-menu.css">
+  <!-- endinjector -->
+  <!-- endbuild -->
 </head>
 <body ng-app="dashboardApp">
 <!--[if lt IE 7]>
 <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade
-    your browser</a> to improve your experience.</p>
+  your browser</a> to improve your experience.</p>
 <![endif]-->
 
 <!-- Add your site or application content here -->
 <app-menu></app-menu>
-<div ui-view=""></div>
+<div class="container" ui-view=""></div>
 
 <!--[if lt IE 9]>
 <script src="bower_components/es5-shim/es5-shim.js"></script>
@@ -55,7 +55,7 @@
 <script src="bower_components/lodash/dist/lodash.compat.js"></script>
 <script src="bower_components/angular-ui-router/release/angular-ui-router.js"></script>
 <!-- endbower -->
-<script src="libs/jquery.cookie.js"></script>
+<script src="libs/ngStorage.js"></script>
 <!-- endbuild -->
 
 <!-- build:js({.tmp,client}) app/app.js -->
@@ -65,6 +65,8 @@
 <script src="app/dashboard/dashboard.js"></script>
 <script src="app/login/login.controller.js"></script>
 <script src="app/login/login.js"></script>
+<script src="app/logout/logout.controller.js"></script>
+<script src="app/logout/logout.js"></script>
 <script src="app/signup/signup.controller.js"></script>
 <script src="app/signup/signup.js"></script>
 <script src="components/app-menu/app-menu.directive.js"></script>

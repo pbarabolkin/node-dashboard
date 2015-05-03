@@ -1,8 +1,9 @@
 'use strict';
 
-var util = require('util');
+var util = require('util'),
+  passport = require('passport');
 
-exports.login = function (req, res) {
+exports.login = function (req, res, next) {
   req.checkBody('email', 'valid email required').isEmail();
   req.checkBody('password', 'valid password required').notEmpty();
   var errors = req.validationErrors();
@@ -11,14 +12,36 @@ exports.login = function (req, res) {
     return;
   }
 
-  if (req.body.email && req.body.password) { //TODO: call DB here
-    var test = req.body.remember;
-    res.json('ok');
-  } else {
-    res.json('error');
-  }
+  passport.authenticate('local', function (err, user, info) {
+    if (err)
+      return next(err);
+
+    if (!user) {
+      req.session.messages = [info.message];
+      res.json({
+        error: 'Invalid email or password'
+      });
+      return;
+    }
+
+    req.logIn(user, function (err) {
+      if (err)
+        return next(err);
+
+      if (req.body.remember) {
+        req.session.cookie.maxAge = 1000 * 60 * 3;
+      } else {
+        req.session.cookie.expires = false;
+      }
+
+      res.json({
+        username: user.username
+      });
+    });
+  })(req, res, next);
 };
 
 exports.logout = function (req, res) {
+  req.logout();
   res.json('ok');
 };
