@@ -1,46 +1,27 @@
 'use strict';
 
 var passport = require('passport'),
-  LocalStrategy = require('passport-local').Strategy;
+  LocalStrategy = require('passport-local').Strategy,
+  User = require('../../data/models/user');
 
 module.exports = function (app) {
-  var users = [
-    {id: 1, username: 'bob', password: 'secret', email: 'bob@example.com'},
-    {id: 2, username: 'joe', password: 'birthday', email: 'joe@example.com'}
-  ];
-
-  function findById(id, fn) {
-    var idx = id - 1;
-    if (users[idx]) {
-      fn(null, users[idx]);
-    } else {
-      fn(new Error('User ' + id + ' does not exist'));
-    }
-  }
-
-  function findByEmail(email, fn) {
-    for (var i = 0, len = users.length; i < len; i++) {
-      var user = users[i];
-      if (user.email === email) {
-        return fn(null, user);
-      }
-    }
-    return fn(null, null);
-  }
-
   // Passport session setup.
   //   To support persistent login sessions, Passport needs to be able to
   //   serialize users into and deserialize users out of the session.  Typically,
   //   this will be as simple as storing the user ID when serializing, and finding
   //   the user by ID when deserializing.
   passport.serializeUser(function (user, done) {
-    done(null, user.id);
+    done(null, user._id);
   });
 
   passport.deserializeUser(function (id, done) {
-    findById(id, function (err, user) {
-      done(err, user);
-    });
+    User.findByIdQ(id)
+      .then(function (result) {
+        if (result)
+          return done(null, result);
+        else
+          return done(new Error('User ' + id + ' does not exist'));
+      });
   });
 
 
@@ -62,18 +43,19 @@ module.exports = function (app) {
         // email, or the password is not correct, set the user to `false` to
         // indicate failure and set a flash message.  Otherwise, return the
         // authenticated `user`.
-        findByEmail(email, function (err, user) {
-          if (err) {
+        User.findOneQ({email: email})
+          .then(function (result) {
+            if (!result)
+              return done(null, false, {message: 'Unknown user ' + email});
+
+            if (result.password != password)
+              return done(null, false, {message: 'Invalid password'});
+
+            return done(null, result);
+          })
+          .catch(function (err) {
             return done(err);
-          }
-          if (!user) {
-            return done(null, false, {message: 'Unknown user ' + email});
-          }
-          if (user.password != password) {
-            return done(null, false, {message: 'Invalid password'});
-          }
-          return done(null, user);
-        })
+          });
       });
     }
   ));

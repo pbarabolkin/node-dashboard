@@ -19,7 +19,9 @@
     "serve-favicon": "~2.0.1",
     "express-session": "latest",
     "passport": "latest",
-    "passport-local": "latest"
+    "passport-local": "latest",
+    "mongoose": "latest",
+    "mongoose-q": "latest"
   },
   "devDependencies": {
     "grunt": "~0.4.4",

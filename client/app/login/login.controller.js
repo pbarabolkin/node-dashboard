@@ -8,9 +8,13 @@ angular.module('dashboardApp')
     $scope.error = '';
 
     $scope.doLogin = function () {
-      Auth.login($scope.email, $scope.password, $scope.remember).then(function (result) {
-        if (result && result.error) {
-          $scope.error = result.error;
+      Auth.login({
+        email: $scope.email,
+        password: $scope.password,
+        remember: $scope.remember
+      }).then(function (result) {
+        if (result && result.errors) {
+          $scope.error = result.errors;
         } else {
           $state.go('dashboard');
         }

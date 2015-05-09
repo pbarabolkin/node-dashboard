@@ -4,15 +4,15 @@ angular.module('dashboardApp')
   .service('Auth', ['$http', 'Config', '$localStorage', function ($http, Config, $localStorage) {
     var self = this;
 
-    self.login = function (email, password, remember) {
-      var promise = $http.post(Config.apiBaseUrl + 'auth/login', {
-        email: email,
-        password: password,
-        remember: remember
-      }).then(function (response) {
+    self.login = function (loginVm) {
+      var promise = $http.post(Config.apiBaseUrl + 'auth/login', loginVm).then(function (response) {
         $localStorage.user = response.data;
 
         return response.data;
+      }, function (response) {
+        return {
+          errors: response.data
+        };
       });
 
       return promise;
@@ -34,5 +34,17 @@ angular.module('dashboardApp')
 
     self.getUser = function () {
       return $localStorage.user;
+    };
+
+    self.signup = function (signupVm) {
+      var promise = $http.post(Config.apiBaseUrl + 'auth/signup', signupVm).then(function (response) {
+        return response.data;
+      }, function (response) {
+        return {
+          errors: response.data
+        };
+      });
+
+      return promise;
     };
   }]);

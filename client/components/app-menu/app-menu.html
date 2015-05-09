@@ -19,7 +19,7 @@
         <li ng-hide="isAuthenticated" class="nav-item"><a ui-sref="signup">Sign up</a>
         </li>
         <li ng-hide="isAuthenticated" class="nav-item"><a ui-sref="login">Login</a></li>
-        <li ng-show="isAuthenticated"><p class="navbar-text ng-binding">Hello, <span ng-bind="user.username"></span></p>
+        <li ng-show="isAuthenticated"><p class="navbar-text ng-binding">Hello, <span ng-bind="user.name"></span></p>
         </li>
         <li ng-show="isAuthenticated" class="nav-item"><a ui-sref="logout">Logout</a>
         </li>
