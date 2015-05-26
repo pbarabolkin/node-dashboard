@@ -1,0 +1,18 @@
+<div class="edit-project">
+  <h1>Add/Edit ticket</h1>
+
+  <div class="row">
+    <div class="col-sm-8">
+      <div class="form-group"><input type="text" class="form-control" placeholder="Name" ng-model="ticket.name"></div>
+      <div class="form-group"><textarea class="form-control" rows="3" placeholder="Description"
+                                        ng-model="ticket.description"></textarea></div>
+    </div>
+    <div class="col-sm-4">
+      <select ng-options="status.name for status in project.statuses track by status.name"
+              ng-model="ticket.status"></select>
+    </div>
+  </div>
+  <button class="btn btn-default" ng-click="save()">Save</button>
+  <div class="alert alert-danger" ng-show="error && error.length" ng-bind="error"></div>
+  <div class="alert alert-success" ng-show="success">Project "{{success}}" has been saved</div>
+</div>

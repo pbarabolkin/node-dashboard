@@ -1,11 +1,16 @@
 'use strict';
 
 angular.module('dashboardApp')
-    .controller('DashboardCtrl', function ($scope, $http) {
-        $scope.awesomeThings = [];
+  .controller('DashboardCtrl', ['$scope', 'Project', function ($scope, Project) {
+    $scope.projects = [];
 
-        $http.get('/api/dashboard').success(function (awesomeThings) {
-            $scope.awesomeThings = awesomeThings;
-        });
-
-    });
+    Project
+      .getProjects()
+      .then(function (result) {
+        if (result && result.errors) {
+          $scope.error = result.errors;
+        } else {
+          $scope.projects = result;
+        }
+      });
+  }]);

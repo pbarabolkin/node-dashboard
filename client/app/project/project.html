@@ -1,0 +1,36 @@
+<div class="edit-project">
+  <h1>Add/Edit project</h1>
+
+  <div><input type="text" ng-model="project.name" placeholder="Project name"></div>
+  <p>
+
+  <div class="row">
+    <div class="col-sm-4">
+      <h2>Statuses</h2>
+      <ul class="list-group">
+        <li class="list-group-item" ng-repeat="status in project.statuses">
+          <div class="input-wrapper">
+            <input type="text" class="pull-left form-control" placeholder="Status name" ng-model="status.name">
+          </div>
+          <span class="pointer glyphicon glyphicon-remove" ng-click="removeStatus($index)"></span>
+        </li>
+      </ul>
+      <button class="btn btn-block btn-default" ng-click="addStatus()">Add status</button>
+    </div>
+    <div class="col-sm-4">
+      <h2>Priorities</h2>
+      <ul class="list-group">
+        <li class="list-group-item" ng-repeat="priority in project.priorities">
+          <div class="input-wrapper">
+            <input type="text" class="pull-left form-control" placeholder="Priority name" ng-model="priority.name">
+          </div>
+          <span class="pointer glyphicon glyphicon-remove" ng-click="removePriority($index)"></span></li>
+      </ul>
+      <button class="btn btn-block btn-default" ng-click="addPriority()">Add priority</button>
+    </div>
+  </div>
+  </p>
+  <button class="btn btn-default" ng-click="save()">Save project</button>
+  <div class="alert alert-danger" ng-show="error" ng-bind="error"></div>
+  <div class="alert alert-success" ng-show="success">Project "{{success}}" has been saved</div>
+</div>

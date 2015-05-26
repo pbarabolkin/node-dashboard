@@ -1,0 +1,15 @@
+<div>
+  <h1>{{project.name}}
+    <button class="btn btn-default" ui-sref="ticket({projectId: project._id})">Create Ticket</button>
+    <button class="btn btn-default pull-right" ui-sref="project({id: project._id})">Edit Project</button>
+  </h1>
+</div>
+<div>
+  <div style="width: {{100/project.statuses.length}}%" class="pull-left" ng-repeat="status in project.statuses">
+    <h2 ng-bind="status.name"></h2>
+    <ul>
+      <li></li>
+    </ul>
+  </div>
+</div>
+<div class="alert alert-danger" ng-show="error && error.length" ng-bind="error"></div>

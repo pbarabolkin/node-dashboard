@@ -1,0 +1,13 @@
+.edit-project .input-wrapper {
+  margin-right: 25px;
+  min-height: 14px;
+}
+
+.edit-project .input-wrapper input {
+  margin-right: 10px;
+}
+
+.edit-project li span {
+  position: relative;
+  top: -4px;
+}

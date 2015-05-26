@@ -5,9 +5,39 @@ angular.module('dashboardApp', [
   'ngResource',
   'ngSanitize',
   'ui.router',
-  'ui.bootstrap'
+  'ui.bootstrap',
+  'angularSpinner'
 ])
   .config(['$stateProvider', '$urlRouterProvider', '$locationProvider', '$httpProvider', function ($stateProvider, $urlRouterProvider, $locationProvider, $httpProvider) {
+
+    // spinner control
+    var numLoadings = 0;
+    $httpProvider.interceptors.push(['$q', 'usSpinnerService', function ($q, usSpinnerService) {
+      return {
+        request: function (config) {
+          numLoadings++;
+
+          usSpinnerService.spin('main-spinner');
+
+          return config || $q.when(config);
+        },
+        response: function (response) {
+          if ((--numLoadings) === 0) {
+            usSpinnerService.stop('main-spinner');
+          }
+
+          return response || $q.when(response);
+        },
+        responseError: function (response) {
+          if (!(--numLoadings)) {
+            usSpinnerService.stop('main-spinner');
+          }
+
+          return $q.reject(response);
+        }
+      };
+    }]);
+
     $httpProvider.interceptors.push(['$rootScope', '$q', '$injector', function (scope, $q, $injector) {
       return {
         response: function (response) {
@@ -43,7 +73,7 @@ angular.module('dashboardApp', [
 
     $urlRouterProvider.otherwise('/');
 
-    $locationProvider.html5Mode(true);
+    $locationProvider.hashPrefix('!');
   }])
   .run(['$rootScope', '$state', 'Auth', function ($rootScope, $state, Auth) {
     $rootScope.$on("$stateChangeStart", function (event, curr, stateParams) {

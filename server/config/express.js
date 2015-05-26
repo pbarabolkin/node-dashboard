@@ -43,7 +43,13 @@ module.exports = function (app) {
   app.use(compression());
   app.use(bodyParser.urlencoded({extended: false}));
   app.use(bodyParser.json());
-  app.use(expressValidator()); // this line must be immediately after express.bodyParser()!
+  app.use(expressValidator({
+    customValidators: {
+      isArray: function (value) {
+        return Array.isArray(value);
+      }
+    }
+  })); // this line must be immediately after express.bodyParser()!
   app.use(methodOverride());
   app.use(cookieParser());
   app.use(expressSession({
