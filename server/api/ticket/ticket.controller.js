@@ -1,9 +1,11 @@
 'use strict';
 
-var Ticket = require('../../data/models/ticket');
+var Ticket = require('../../data/models/ticket'),
+  _ = require('lodash'),
+  Q = require('q');
 
 exports.getTickets = function (req, res, next) {
-  req.checkQuery('projectId', 'projectId is invalid').notEmpty();
+  req.checkParams('projectId', 'projectId is invalid').notEmpty();
 
   var errors = req.validationErrors();
   if (errors) {
@@ -12,7 +14,7 @@ exports.getTickets = function (req, res, next) {
     }), 400);
   }
 
-  Ticket.findQ({projectId: req.query.projectId})
+  Ticket.findQ({projectId: req.params.projectId}, null, {sort: {name: 1}})
     .then(function (result) {
       return res.json(result);
     })
@@ -33,8 +35,11 @@ exports.get = function (req, res, next) {
 
 exports.save = function (req, res, next) {
   req.checkBody('name', 'name is invalid').notEmpty();
-  req.checkBody('priorities', 'priorities are invalid').isArray();
-  req.checkBody('statuses', 'statuses are invalid').isArray();
+  req.checkBody('description', 'description is invalid').notEmpty();
+  req.checkBody('statusId', 'statusId is invalid').notEmpty();
+  req.checkBody('priorityId', 'priorityId is invalid').notEmpty();
+  req.checkBody('assigneeId', 'assigneeId is invalid').notEmpty();
+  req.checkBody('projectId', 'projectId is invalid').notEmpty();
 
   var errors = req.validationErrors();
   if (errors) {
@@ -49,8 +54,10 @@ exports.save = function (req, res, next) {
     Ticket.findByIdQ(req.body._id)
       .then(function (ticket) {
         ticket.name = req.body.name;
-        ticket.priorities = req.body.priorities;
-        ticket.statuses = req.body.statuses;
+        ticket.description = req.body.description;
+        ticket.statusId = req.body.statusId;
+        ticket.priorityId = req.body.priorityId;
+        ticket.assigneeId = req.body.assigneeId;
 
         saveTicket(ticket, res);
       })
@@ -62,8 +69,12 @@ exports.save = function (req, res, next) {
 
     var ticket = new Ticket({
       name: req.body.name,
-      priorities: req.body.priorities,
-      statuses: req.body.statuses
+      description: req.body.description,
+      order: 0,
+      statusId: req.body.statusId,
+      priorityId: req.body.priorityId,
+      assigneeId: req.body.assigneeId,
+      projectId: req.body.projectId
     });
 
     return saveTicket(ticket, res);
@@ -77,6 +88,28 @@ exports.save = function (req, res, next) {
       })
       .catch(function (err) {
         return res.json(err.message, 500);
+      });
+  }
+};
+
+exports.updateOrders = function (req, res, next) {
+  if (!_.isArray(req.body))
+    return res.json(['parameters are invalid'], 400);
+
+  return Q.all(req.body.map(updateOrder))
+    .then(function (results) {
+      return res.json();
+    })
+    .catch(function (err) {
+      return res.json(err.message, 500);
+    });
+
+  function updateOrder(item) {
+    Ticket.findByIdQ(item._id)
+      .then(function (ticket) {
+        ticket.statusId = item.statusId;
+        ticket.order = item.order;
+        return ticket.saveQ();
       });
   }
 };

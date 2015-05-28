@@ -8,11 +8,24 @@
                                         ng-model="ticket.description"></textarea></div>
     </div>
     <div class="col-sm-4">
-      <select ng-options="status.name for status in project.statuses track by status.name"
-              ng-model="ticket.status"></select>
+      <div class="form-group"><span>Status:</span><select
+        ng-options="status._id as status.name for status in project.statuses"
+        ng-model="ticket.statusId">
+        <option value=''>- Please Choose Status -</option>
+      </select></div>
+      <div class="form-group"><span>Priority:</span><select
+        ng-options="priority._id as priority.name for priority in project.priorities"
+        ng-model="ticket.priorityId">
+        <option value=''>- Please Choose Priority -</option>
+      </select></div>
+      <div class="form-group"><span>Assignee:</span><select
+        ng-options="assignee._id as assignee.lName for assignee in users"
+        ng-model="ticket.assigneeId">
+        <option value=''>- Please Choose Assignee -</option>
+      </select></div>
     </div>
   </div>
   <button class="btn btn-default" ng-click="save()">Save</button>
   <div class="alert alert-danger" ng-show="error && error.length" ng-bind="error"></div>
-  <div class="alert alert-success" ng-show="success">Project "{{success}}" has been saved</div>
+  <div class="alert alert-success" ng-show="success">Ticket "{{success}}" has been saved</div>
 </div>

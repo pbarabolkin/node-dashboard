@@ -7,8 +7,18 @@
 <div>
   <div style="width: {{100/project.statuses.length}}%" class="pull-left" ng-repeat="status in project.statuses">
     <h2 ng-bind="status.name"></h2>
-    <ul>
-      <li></li>
+    <ul dnd-list="groupedTickets[status._id] | orderBy: 'order'"
+        dnd-drop="dropCallback(event, index, item, external, type, status._id)">
+      <li ng-repeat="ticket in groupedTickets[status._id] | orderBy: 'order'"
+          dnd-draggable="ticket"
+          dnd-moved="$parent.ticketMoved(ticket)"
+          dnd-effect-allowed="move"
+          dnd-selected="selectedTicket = ticket">
+        <a ng-bind="ticket.name" ui-sref="ticket({id: ticket._id})"></a>
+
+        <p ng-bind="ticket.description"></p>
+        <span ng-bind="ticket.assigneeId"></span>
+      </li>
     </ul>
   </div>
 </div>

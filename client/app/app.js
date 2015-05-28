@@ -6,7 +6,8 @@ angular.module('dashboardApp', [
   'ngSanitize',
   'ui.router',
   'ui.bootstrap',
-  'angularSpinner'
+  'angularSpinner',
+  'dndLists'
 ])
   .config(['$stateProvider', '$urlRouterProvider', '$locationProvider', '$httpProvider', function ($stateProvider, $urlRouterProvider, $locationProvider, $httpProvider) {
 

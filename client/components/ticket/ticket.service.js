@@ -6,7 +6,7 @@ angular.module('dashboardApp')
 
     self.getTickets = function (projectId) {
       var promise = $http
-        .get(Config.apiBaseUrl + 'ticket?projectId=' + projectId)
+        .get(Config.apiBaseUrl + 'ticket/project/' + projectId)
         .then(function (response) {
           return response.data;
         }, function (response) {
@@ -35,6 +35,20 @@ angular.module('dashboardApp')
     self.save = function (ticket) {
       var promise = $http
         .post(Config.apiBaseUrl + 'ticket', ticket)
+        .then(function (response) {
+          return response.data;
+        }, function (response) {
+          return {
+            errors: response.data
+          };
+        });
+
+      return promise;
+    };
+
+    self.updateOrders = function (tickets) {
+      var promise = $http
+        .post(Config.apiBaseUrl + 'ticket/updateOrders', tickets)
         .then(function (response) {
           return response.data;
         }, function (response) {

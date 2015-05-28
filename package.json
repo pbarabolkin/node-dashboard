@@ -21,7 +21,8 @@
     "passport": "latest",
     "passport-local": "latest",
     "mongoose": "latest",
-    "mongoose-q": "latest"
+    "mongoose-q": "latest",
+    "q": "latest"
   },
   "devDependencies": {
     "grunt": "~0.4.4",

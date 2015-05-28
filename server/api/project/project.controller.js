@@ -24,8 +24,8 @@ exports.get = function (req, res, next) {
 
 exports.save = function (req, res, next) {
   req.checkBody('name', 'name is invalid').notEmpty();
-  req.checkBody('priorities', 'priorities are invalid').isArray();
-  req.checkBody('statuses', 'statuses are invalid').isArray();
+  req.checkBody('priorities', 'priorities are invalid').isArray().notEmpty();
+  req.checkBody('statuses', 'statuses are invalid').isArray().notEmpty();
 
   var errors = req.validationErrors();
   if (errors) {

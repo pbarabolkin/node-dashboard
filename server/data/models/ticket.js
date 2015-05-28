@@ -6,8 +6,9 @@ var Schema = mongoose.Schema;
 var schema = new Schema({
   name: String,
   description: String,
-  status: String,
-  priority: String,
+  order: Number,
+  statusId: Schema.ObjectId,
+  priorityId: Schema.ObjectId,
   assigneeId: Schema.ObjectId,
   projectId: Schema.ObjectId
 });

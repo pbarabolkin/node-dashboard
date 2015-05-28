@@ -30,7 +30,7 @@ exports.login = function (req, res, next) {
         return next(err);
 
       if (req.body.remember) {
-        req.session.cookie.maxAge = 1000 * 60 * 3;
+        req.session.cookie.maxAge = 1000 * 60 * 60; // 1 hour
       } else {
         req.session.cookie.expires = false;
       }

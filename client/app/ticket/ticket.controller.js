@@ -1,13 +1,14 @@
 'use strict';
 
 angular.module('dashboardApp')
-  .controller('TicketCtrl', ['$scope', '$stateParams', '$q', 'Ticket', 'Project', function ($scope, $stateParams, $q, Ticket, Project) {
+  .controller('TicketCtrl', ['$scope', '$stateParams', '$q', 'Ticket', 'Project', 'User', function ($scope, $stateParams, $q, Ticket, Project, User) {
     $scope.error = [];
     $scope.ticket = {
       name: '',
       description: '',
-      status: {},
-      priority: {},
+      order: 0,
+      statusId: '',
+      priorityId: '',
       assigneeId: '',
       projectId: $stateParams.projectId
     };
@@ -16,12 +17,14 @@ angular.module('dashboardApp')
       statuses: [],
       priorities: []
     };
+    $scope.users = [];
 
     // if new ticket
     if (!$stateParams.id) {
       $q.all([
         loadTicket(),
-        Project.get($stateParams.projectId)
+        Project.get($stateParams.projectId),
+        User.getUsers()
       ]).then(function (res) {
         if (res[0] && res[0].errors) {
           $scope.error.concat(res[0].errors);
@@ -35,30 +38,48 @@ angular.module('dashboardApp')
           $scope.project = res[1];
         }
 
+        if (res[2] && res[2].errors) {
+          $scope.error.concat(res[2].errors);
+        } else {
+          $scope.users = res[2];
+        }
+
         dataLoaded();
       });
     } else {
       // existing ticket
 
-      loadTicket()
-        .then(function (result) {
-          if (result && result.errors) {
-            $scope.error.concat(result.errors);
-          } else {
-            $scope.ticket = result;
-            Project
-              .get($scope.ticket.projectId)
-              .then(function (result) {
-                if (result && result.errors) {
-                  $scope.error.concat(result.errors);
-                } else {
-                  $scope.project = result;
-                }
+      $q.all([
+        loadTicket(),
+        User.getUsers()
+      ]).then(function (res) {
+        if (res[0] && res[0].errors) {
+          $scope.error.concat(res[0].errors);
+        } else {
+          $scope.ticket = res[0];
+        }
 
-                dataLoaded();
-              });
-          }
-        });
+        if (res[1] && res[1].errors) {
+          $scope.error.concat(res[1].errors);
+        } else {
+          $scope.users = res[1];
+        }
+
+        if ($scope.error.length)
+          return;
+
+        Project
+          .get($scope.ticket.projectId)
+          .then(function (result) {
+            if (result && result.errors) {
+              $scope.error.concat(result.errors);
+            } else {
+              $scope.project = result;
+            }
+
+            dataLoaded();
+          });
+      });
     }
 
     function loadTicket() {
@@ -75,8 +96,9 @@ angular.module('dashboardApp')
         d.resolve({
           name: '',
           description: '',
-          status: {},
-          priority: {},
+          order: 0,
+          statusId: '',
+          priorityId: '',
           assigneeId: '',
           projectId: $stateParams.projectId
         });
