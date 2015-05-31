@@ -9,5 +9,6 @@ var router = express.Router();
 router.get('/', auth.ensureAuthenticated, controller.getProjects);
 router.get('/:id', auth.ensureAuthenticated, controller.get);
 router.post('/', auth.ensureAuthenticated, controller.save);
+router.delete('/:id', auth.ensureAuthenticated, controller.delete);
 
 module.exports = router;

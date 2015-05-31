@@ -1,20 +1,35 @@
 'use strict';
 
 angular.module('dashboardApp')
-  .controller('ProjectCtrl', ['$scope', '$stateParams', 'Project', function ($scope, $stateParams, Project) {
+  .controller('ProjectCtrl', ['$scope', '$stateParams', '$q', 'Project', 'Ticket', function ($scope, $stateParams, $q, Project, Ticket) {
+    $scope.error = [];
+    $scope.project = {
+      name: '',
+      statuses: [],
+      priorities: []
+    };
+    $scope.tickets = [];
+
     if ($stateParams.id) {
-      Project
-        .get($stateParams.id)
-        .then(function (result) {
-          $scope.project = result;
-          projectLoaded();
-        });
+      $q.all([
+        Project.get($stateParams.id),
+        Ticket.getTickets($stateParams.id)
+      ]).then(function (res) {
+        if (res[0] && res[0].errors) {
+          $scope.error = $scope.error.concat(res[0].errors);
+        } else {
+          $scope.project = res[0];
+        }
+
+        if (res[1] && res[1].errors) {
+          $scope.error = $scope.error.concat(res[1].errors);
+        } else {
+          $scope.tickets = res[1];
+        }
+
+        projectLoaded();
+      });
     } else {
-      $scope.project = {
-        name: '',
-        statuses: [],
-        priorities: []
-      };
       projectLoaded();
     }
 
@@ -24,6 +39,13 @@ angular.module('dashboardApp')
       };
 
       $scope.removeStatus = function (index) {
+        $scope.error = [];
+        $scope.success = null;
+        if (_.some($scope.tickets, {'statusId': $scope.project.statuses[index]._id})) {
+          $scope.error.push('Some tickets use this priority.');
+          return;
+        }
+
         $scope.project.statuses.splice(index, 1);
       };
 
@@ -36,7 +58,7 @@ angular.module('dashboardApp')
       };
 
       $scope.save = function () {
-        $scope.error = null;
+        $scope.error = [];
         $scope.success = null;
 
         Project.save($scope.project)

@@ -14,7 +14,10 @@ exports.getTickets = function (req, res, next) {
     }), 400);
   }
 
-  Ticket.findQ({projectId: req.params.projectId}, null, {sort: {name: 1}})
+  Ticket
+    .find({projectId: req.params.projectId}, null, {sort: {name: 1}})
+    .populate('_assignee')
+    .execQ()
     .then(function (result) {
       return res.json(result);
     })
@@ -24,7 +27,10 @@ exports.getTickets = function (req, res, next) {
 };
 
 exports.get = function (req, res, next) {
-  Ticket.findByIdQ(req.params.id)
+  Ticket
+    .findById(req.params.id)
+    .populate('_assignee')
+    .execQ()
     .then(function (result) {
       return res.json(result);
     })
@@ -38,7 +44,6 @@ exports.save = function (req, res, next) {
   req.checkBody('description', 'description is invalid').notEmpty();
   req.checkBody('statusId', 'statusId is invalid').notEmpty();
   req.checkBody('priorityId', 'priorityId is invalid').notEmpty();
-  req.checkBody('assigneeId', 'assigneeId is invalid').notEmpty();
   req.checkBody('projectId', 'projectId is invalid').notEmpty();
 
   var errors = req.validationErrors();
@@ -57,7 +62,7 @@ exports.save = function (req, res, next) {
         ticket.description = req.body.description;
         ticket.statusId = req.body.statusId;
         ticket.priorityId = req.body.priorityId;
-        ticket.assigneeId = req.body.assigneeId;
+        ticket._assignee = req.body._assignee;
 
         saveTicket(ticket, res);
       })
@@ -73,7 +78,7 @@ exports.save = function (req, res, next) {
       order: 0,
       statusId: req.body.statusId,
       priorityId: req.body.priorityId,
-      assigneeId: req.body.assigneeId,
+      _assignee: req.body._assignee,
       projectId: req.body.projectId
     });
 
@@ -112,4 +117,14 @@ exports.updateOrders = function (req, res, next) {
         return ticket.saveQ();
       });
   }
+};
+
+exports.delete = function (req, res, next) {
+  Ticket.removeQ({_id: req.params.id})
+    .then(function (result) {
+      return res.json();
+    })
+    .catch(function (err) {
+      return res.json(err.message, 500);
+    });
 };

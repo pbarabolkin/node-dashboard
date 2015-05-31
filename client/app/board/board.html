@@ -4,9 +4,10 @@
     <button class="btn btn-default pull-right" ui-sref="project({id: project._id})">Edit Project</button>
   </h1>
 </div>
-<div>
-  <div style="width: {{100/project.statuses.length}}%" class="pull-left" ng-repeat="status in project.statuses">
-    <h2 ng-bind="status.name"></h2>
+<div class="status-table">
+  <div style="width: {{100/project.statuses.length}}%" class="col-wraper"
+       ng-repeat="status in project.statuses">
+    <h2 ng-bind="status.name" class="text-center"></h2>
     <ul dnd-list="groupedTickets[status._id] | orderBy: 'order'"
         dnd-drop="dropCallback(event, index, item, external, type, status._id)">
       <li ng-repeat="ticket in groupedTickets[status._id] | orderBy: 'order'"
@@ -17,7 +18,7 @@
         <a ng-bind="ticket.name" ui-sref="ticket({id: ticket._id})"></a>
 
         <p ng-bind="ticket.description"></p>
-        <span ng-bind="ticket.assigneeId"></span>
+        <span class="text-primary" ng-bind="ticket._assignee.fName + ' ' + ticket._assignee.lName"></span>
       </li>
     </ul>
   </div>

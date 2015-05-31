@@ -71,3 +71,13 @@ exports.save = function (req, res, next) {
       });
   }
 };
+
+exports.delete = function (req, res, next) {
+  Project.removeQ({_id: req.params.id})
+    .then(function (result) {
+      return res.json();
+    })
+    .catch(function (err) {
+      return res.json(err.message, 500);
+    });
+};

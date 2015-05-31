@@ -1,5 +1,9 @@
-<div class="edit-project">
-  <h1>Add/Edit ticket</h1>
+<div class="edit-ticket">
+  <h1>Add/Edit ticket
+    <button class="btn btn-danger pull-right" ng-show="ticket._id" ng-click="remove(ticket._id)"><i
+      class="glyphicon glyphicon-trash"></i> Remove ticket
+    </button>
+  </h1>
 
   <div class="row">
     <div class="col-sm-8">
@@ -8,19 +12,19 @@
                                         ng-model="ticket.description"></textarea></div>
     </div>
     <div class="col-sm-4">
-      <div class="form-group"><span>Status:</span><select
-        ng-options="status._id as status.name for status in project.statuses"
-        ng-model="ticket.statusId">
+      <div class="form-group"><label>Status:</label><select class="pull-right"
+                                                            ng-options="status._id as status.name for status in project.statuses"
+                                                            ng-model="ticket.statusId">
         <option value=''>- Please Choose Status -</option>
       </select></div>
-      <div class="form-group"><span>Priority:</span><select
-        ng-options="priority._id as priority.name for priority in project.priorities"
-        ng-model="ticket.priorityId">
+      <div class="form-group"><label>Priority:</label><select class="pull-right"
+                                                              ng-options="priority._id as priority.name for priority in project.priorities"
+                                                              ng-model="ticket.priorityId">
         <option value=''>- Please Choose Priority -</option>
       </select></div>
-      <div class="form-group"><span>Assignee:</span><select
-        ng-options="assignee._id as assignee.lName for assignee in users"
-        ng-model="ticket.assigneeId">
+      <div class="form-group"><label>Assignee:</label><select class="pull-right"
+                                                              ng-options="assignee._id as (assignee.fName + ' ' + assignee.lName) for assignee in users"
+                                                              ng-model="ticket._assignee._id">
         <option value=''>- Please Choose Assignee -</option>
       </select></div>
     </div>

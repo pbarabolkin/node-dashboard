@@ -9,7 +9,7 @@ var schema = new Schema({
   order: Number,
   statusId: Schema.ObjectId,
   priorityId: Schema.ObjectId,
-  assigneeId: Schema.ObjectId,
+  _assignee: {type: Schema.ObjectId, required: false, ref: 'User'},
   projectId: Schema.ObjectId
 });
 

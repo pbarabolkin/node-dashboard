@@ -59,4 +59,18 @@ angular.module('dashboardApp')
 
       return promise;
     };
+
+    self.remove = function (id) {
+      var promise = $http
+        .delete(Config.apiBaseUrl + 'ticket/' + id)
+        .then(function (response) {
+          return response.data;
+        }, function (response) {
+          return {
+            errors: response.data
+          };
+        });
+
+      return promise;
+    };
   }]);

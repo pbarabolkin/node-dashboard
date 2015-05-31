@@ -31,6 +31,6 @@
   </div>
   </p>
   <button class="btn btn-default" ng-click="save()">Save project</button>
-  <div class="alert alert-danger" ng-show="error" ng-bind="error"></div>
+  <div class="alert alert-danger" ng-show="error && error.length" ng-bind="error"></div>
   <div class="alert alert-success" ng-show="success">Project "{{success}}" has been saved</div>
 </div>

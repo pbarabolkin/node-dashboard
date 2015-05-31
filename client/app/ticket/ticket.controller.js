@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('dashboardApp')
-  .controller('TicketCtrl', ['$scope', '$stateParams', '$q', 'Ticket', 'Project', 'User', function ($scope, $stateParams, $q, Ticket, Project, User) {
+  .controller('TicketCtrl', ['$scope', '$stateParams', '$q', '$state', 'Ticket', 'Project', 'User', function ($scope, $stateParams, $q, $state, Ticket, Project, User) {
     $scope.error = [];
     $scope.ticket = {
       name: '',
@@ -9,7 +9,7 @@ angular.module('dashboardApp')
       order: 0,
       statusId: '',
       priorityId: '',
-      assigneeId: '',
+      _assignee: {},
       projectId: $stateParams.projectId
     };
     $scope.project = {
@@ -27,19 +27,19 @@ angular.module('dashboardApp')
         User.getUsers()
       ]).then(function (res) {
         if (res[0] && res[0].errors) {
-          $scope.error.concat(res[0].errors);
+          $scope.error = $scope.error.concat(res[0].errors);
         } else {
           $scope.ticket = res[0];
         }
 
         if (res[1] && res[1].errors) {
-          $scope.error.concat(res[1].errors);
+          $scope.error = $scope.error.concat(res[1].errors);
         } else {
           $scope.project = res[1];
         }
 
         if (res[2] && res[2].errors) {
-          $scope.error.concat(res[2].errors);
+          $scope.error = $scope.error.concat(res[2].errors);
         } else {
           $scope.users = res[2];
         }
@@ -54,13 +54,13 @@ angular.module('dashboardApp')
         User.getUsers()
       ]).then(function (res) {
         if (res[0] && res[0].errors) {
-          $scope.error.concat(res[0].errors);
+          $scope.error = $scope.error.concat(res[0].errors);
         } else {
           $scope.ticket = res[0];
         }
 
         if (res[1] && res[1].errors) {
-          $scope.error.concat(res[1].errors);
+          $scope.error = $scope.error.concat(res[1].errors);
         } else {
           $scope.users = res[1];
         }
@@ -72,7 +72,7 @@ angular.module('dashboardApp')
           .get($scope.ticket.projectId)
           .then(function (result) {
             if (result && result.errors) {
-              $scope.error.concat(result.errors);
+              $scope.error = $scope.error.concat(result.errors);
             } else {
               $scope.project = result;
             }
@@ -99,7 +99,7 @@ angular.module('dashboardApp')
           order: 0,
           statusId: '',
           priorityId: '',
-          assigneeId: '',
+          _assignee: {},
           projectId: $stateParams.projectId
         });
       }
@@ -115,11 +115,23 @@ angular.module('dashboardApp')
         Ticket.save($scope.ticket)
           .then(function (result) {
             if (result && result.errors) {
-              $scope.error.concat(result.errors);
+              $scope.error = $scope.error.concat(result.errors);
             } else {
               $scope.success = result;
             }
           });
-      }
+      };
+
+      $scope.remove = function (id) {
+        if (confirm("Are you sure you want to delete this ticket?")) {
+          Ticket.remove(id).then(function (result) {
+            if (result && result.errors) {
+              $scope.error = result.errors;
+            } else {
+              $state.go('board', {id: $scope.ticket.projectId});
+            }
+          });
+        }
+      };
     }
   }]);

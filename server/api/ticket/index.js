@@ -10,5 +10,6 @@ router.get('/project/:projectId', auth.ensureAuthenticated, controller.getTicket
 router.get('/:id', auth.ensureAuthenticated, controller.get);
 router.post('/', auth.ensureAuthenticated, controller.save);
 router.post('/updateOrders', auth.ensureAuthenticated, controller.updateOrders);
+router.delete('/:id', auth.ensureAuthenticated, controller.delete);
 
 module.exports = router;

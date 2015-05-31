@@ -1,6 +1,8 @@
 <h1>Project list</h1>
 <div class="list-group">
-  <a class="list-group-item" ng-repeat="proj in projects" ui-sref="board({id: proj._id})">{{proj.name}}</a>
+  <a class="list-group-item" ng-repeat="proj in projects" ui-sref="board({id: proj._id})">{{proj.name}}<span
+    class="pull-right glyphicon glyphicon-remove"
+    ng-click="$event.stopPropagation();$event.preventDefault();$parent.removeProject(proj._id,$index);"></span></a>
 </div>
 <button class="btn btn-default" ui-sref="project">Create project</button>
 <div class="alert alert-danger" ng-show="error" ng-bind="error"></div>

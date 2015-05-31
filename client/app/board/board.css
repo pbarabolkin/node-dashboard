@@ -1,0 +1,25 @@
+.status-table {
+  display: table;
+  width: 100%;
+  table-layout: fixed;
+}
+
+.status-table h2 {
+  border-bottom: 2px solid #999;
+  margin-left: -10px;
+  margin-right: -10px;
+}
+
+.status-table .col-wraper {
+  display: table-cell;
+  padding: 0 10px;
+  border-right: 2px solid #999;
+}
+
+.status-table .col-wraper:last-child {
+  border-right: none;
+}
+
+.status-table ul[dnd-list] li {
+  margin-bottom: 20px;
+}
